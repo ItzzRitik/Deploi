@@ -1,0 +1,23 @@
+{
+  "name": "notify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ItzzRitik/Notify.git"
+  },
+  "author": "Ritik Srivastava",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ItzzRitik/Notify/issues"
+  },
+  "homepage": "https://github.com/ItzzRitik/Notify#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket-io": "^1.0.0"
+  }
+}

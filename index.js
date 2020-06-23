@@ -27,7 +27,13 @@ app.use(function(req, res, next) {
 });
 
 app.post('/netlify', (req, res) => {
-	console.log('Body: ', req.body);
+	console.log('Netlify Body: ', req.body);
+	res.status(200)
+});
+
+app.post('/heroku', (req, res) => {
+	console.log('Heroku Body: ', req.body);
+	res.status(200)
 });
 
 app.get('/*', (req, res) => {

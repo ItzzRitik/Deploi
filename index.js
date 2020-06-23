@@ -8,6 +8,7 @@ let express = require('express'),
 	jwt = require('jsonwebtoken'),
 	socketIO = require('socket.io'),
 	io = socketIO(server),
+	crypto = require('crypto'),
 	
 	//socketUtils = require('./tools/socketUtils');
 	logger = require('./tools/logger');
@@ -29,20 +30,24 @@ app.use(function(req, res, next) {
 
 let netlifySigned = (req, res, next) => {
 	let signature = req.header('X-Webhook-Signature'),
-		options = { iss: 'netlify', verify_iss: true, algorithm: 'HS256' };
-	console.log(signature);
+		options = { iss: 'netlify', verify_iss: true, algorithm: 'HS256' },
+		decodedHash = jwt.decode(signature, env.NETLIFY_KEY, true, options),
+		bodyHash = crypto.createHash('sha256', decodedHash.sha256).update(JSON.stringify(req.body)).digest('hex');
 
-	jwt.decode(signature, env.NETLIFY_KEY, true, options);
+	if (decodedHash !== bodyHash) {
+		res.status(403).send('Please provide a valid webhook signature!');
+	}
+	
 	next();
 };
 
 app.post('/netlify', netlifySigned, (req, res) => {
-	console.log('Netlify Body: ', req.body);
-	res.status(200).send('');
+	console.log('Netlify Body: ', JSON.stringify(req.body));
+	res.status(200).send('Thankyou for status update!');
 });
 
 app.post('/heroku', (req, res) => {
-	console.log('Heroku Body: ', req.body);
+	console.log('Heroku Body: ', JSON.stringify(req.body));
 	res.status(200).send('');
 });
 

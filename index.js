@@ -8,7 +8,7 @@ express = require('express'),
     socketIO = require('socket.io'),
 	io = socketIO(server),
 	
-	socketUtils = require('./tools/socketUtils');
+	//socketUtils = require('./tools/socketUtils');
 
 require('dotenv').config();
 const env = process.env;
@@ -24,11 +24,13 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.post('/netlify', (req, res) => {
+	console.log(req.body);
+});
+
 server.listen(env.PORT || 8080, function() {
     logger.clear();
     logger.log(true, 'Starting Server');
     logger.log(false, 'Server is running at', 
         chalk.blue('http://' + (env.IP || ip.address() || 'localhost') + ':' + (env.PORT || '8080')));
-	
-	
 });

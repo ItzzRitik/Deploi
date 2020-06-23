@@ -9,6 +9,8 @@ express = require('express'),
 	io = socketIO(server),
 	
 	//socketUtils = require('./tools/socketUtils');
+	logger = require('./tools/logger');
+	
 
 require('dotenv').config();
 const env = process.env;
@@ -25,7 +27,11 @@ app.use(function(req, res, next) {
 });
 
 app.post('/netlify', (req, res) => {
-	console.log(req.body);
+	console.log('Body: ', req.body);
+});
+
+app.get('/*', (req, res) => {
+	res.status(200).send('Working!');
 });
 
 server.listen(env.PORT || 8080, function() {

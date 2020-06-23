@@ -26,14 +26,18 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.post('/netlify', (req, res) => {
+app.post('/netlify', 
+(req, res, next) => {
+	next();
+}
+,(req, res) => {
 	console.log('Netlify Body: ', req.body);
-	res.status(200)
+	res.status(200).send('');
 });
 
 app.post('/heroku', (req, res) => {
 	console.log('Heroku Body: ', req.body);
-	res.status(200)
+	res.status(200).send('');
 });
 
 app.get('/*', (req, res) => {

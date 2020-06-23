@@ -1,5 +1,5 @@
 {
-  "name": "notify",
+  "name": "deplow",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -21,6 +21,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "ip": "^1.1.5",
+    "jsonwebtoken": "^8.5.1",
     "socket-io": "^1.0.0",
     "socket.io": "^2.3.0"
   }

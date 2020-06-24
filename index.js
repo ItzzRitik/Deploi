@@ -29,8 +29,6 @@ app.use(function(req, res, next) {
 });
 
 let netlifySigned = (req, res, next) => {
-	console.log(req.header('X-Webhook-Signature'));
-	console.log('Netlify Body: ', JSON.stringify(req.body));
 	let signature = req.header('X-Webhook-Signature'),
 		options = { iss: 'netlify', verify_iss: true, algorithm: 'HS256' },
 		decodedHash = jwt.decode(signature, env.NETLIFY_KEY, true, options).sha256,
@@ -46,17 +44,17 @@ let netlifySigned = (req, res, next) => {
 app.post('/netlify', netlifySigned, (req, res) => {
 	let data = {
 		service: 'Netlify',
-		buildId: req.body.id,
+		id: req.body.id,
+		url: `https://app.netlify.com/sites/${req.body.name.toLowerCase()}/deploys/${req.body.id}`,
+		state: req.body.state,
 		appName: req.body.name.charAt(0).toUpperCase() + req.body.name.substr(1).toLowerCase(),
-		state: req.body.state
+		appUrl: req.body.url
 	};
 	socketUtils.notify(io, data);
-	console.log('Status: ', req.body.state);
 	res.status(200).send('Thankyou for status update!');
 });
 
 app.post('/heroku', (req, res) => {
-	console.log('Heroku Body: ', JSON.stringify(req.body));
 	res.status(200).send('');
 });
 
@@ -70,6 +68,6 @@ server.listen(env.PORT || 8080, function() {
 	logger.log(false, 'Server is running at', 
 		chalk.blue('http://' + (env.IP || ip.address() || 'localhost') + ':' + (env.PORT || '8080')));
 	socketUtils.initialize(io, () => {
-		logger.log(false, 'Socket initialized'); 
+		logger.log(true, 'Socket initialized'); 
 	});
 });

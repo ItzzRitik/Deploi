@@ -5,12 +5,18 @@ const logger = require('./logger'),
 		if (data.service === 'Netlify') io.in('notificationRoom').emit('netlifyNotification', data);
 		else if (data.service === 'Heroku') io.in('notificationRoom').emit('herokuNotification', data);
 	},
+	instances = {},
 	initialize = (io, cb) => {
 		io.on('connection', (socket) => {
-			socket.join('notificationRoom');
+			socket.on('join', (instance, cb) => {
+				socket.join('notificationRoom');
+				instances[socket.id] = instance;
+				logger.log(false, chalk.green(instance) + ' connected to socket');
+				cb();
+			});
         
 			socket.on('disconnect', () => {
-				logger.log(true, 'Client disconnected: ', chalk.red(socket.id));
+				logger.log(false, chalk.red(instances[socket.id]) + ' disconnected from socket');
 			});
 		});
 		cb();

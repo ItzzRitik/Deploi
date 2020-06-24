@@ -11,13 +11,13 @@ const logger = require('./logger'),
 			socket.on('join', (instance, cb) => {
 				socket.join('notificationRoom');
 				instances[socket.id] = instance;
-				logger.log(false, chalk.green(instance) + ' connected');
+				logger.log(false, chalk.green(instances[socket.id]) + ' (' + socket.id + ') connected');
 
 				cb((socket.handshake.secure ? 'https://' : 'http://') + socket.handshake.headers.host);
 			});
         
 			socket.on('disconnect', () => {
-				logger.log(false, chalk.red(instances[socket.id]) + ' disconnected');
+				logger.log(false, chalk.red(instances[socket.id]) + ' (' + socket.id + ') disconnected');
 			});
 		});
 		cb();

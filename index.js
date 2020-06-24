@@ -55,6 +55,9 @@ app.post('/netlify', netlifySigned, (req, res) => {
 });
 
 app.post('/heroku', (req, res) => {
+	console.log('Params: ', req.params);
+	console.log('Query: ', req.query);
+	console.log('Body: ', req.body);
 	res.status(200).send('');
 });
 

@@ -59,7 +59,7 @@ app.post('/heroku', (req, res) => {
 });
 
 app.get('/*', (req, res) => {
-	res.status(200).send('Working!');
+	res.status(200).send('Server is Working!');
 });
 
 server.listen(env.PORT || 8080, function() {

@@ -32,4 +32,4 @@ let call = 0,
 		console.clear();
 	};
 
-module.exports = {info, log, trace, warn, error, stdout, clear};
+module.exports = { info, log, trace, warn, error, stdout, clear };

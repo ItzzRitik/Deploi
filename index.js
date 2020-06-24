@@ -9,9 +9,8 @@ let express = require('express'),
 	socketIO = require('socket.io'),
 	io = socketIO(server),
 	crypto = require('crypto'),
-	notifier = require('node-notifier'),
 	
-	//socketUtils = require('./tools/socketUtils');
+	socketUtils = require('./tools/socketUtils'),
 	logger = require('./tools/logger');
 	
 
@@ -45,11 +44,14 @@ let netlifySigned = (req, res, next) => {
 };
 
 app.post('/netlify', netlifySigned, (req, res) => {
-	let appName = req.body.name.charAt(0).toUpperCase() + req.body.name.substr(1).toLowerCase();
-	notifier.notify({
-		title: appName,
-		message: 'Hello, there!'
-	});
+	let data = {
+		service: 'Netlify',
+		buildId: req.body.id,
+		appName: req.body.name.charAt(0).toUpperCase() + req.body.name.substr(1).toLowerCase(),
+		state: req.body.state
+	};
+	socketUtils.notify(io, data);
+	console.log('Status: ', req.body.state);
 	res.status(200).send('Thankyou for status update!');
 });
 
@@ -67,4 +69,7 @@ server.listen(env.PORT || 8080, function() {
 	logger.log(true, 'Starting Server');
 	logger.log(false, 'Server is running at', 
 		chalk.blue('http://' + (env.IP || ip.address() || 'localhost') + ':' + (env.PORT || '8080')));
+	socketUtils.initialize(io, () => {
+		logger.log(false, 'Socket initialized'); 
+	});
 });

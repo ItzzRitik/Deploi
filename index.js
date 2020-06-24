@@ -9,6 +9,7 @@ let express = require('express'),
 	socketIO = require('socket.io'),
 	io = socketIO(server),
 	crypto = require('crypto'),
+	notifier = require('node-notifier'),
 	
 	//socketUtils = require('./tools/socketUtils');
 	logger = require('./tools/logger');
@@ -29,20 +30,26 @@ app.use(function(req, res, next) {
 });
 
 let netlifySigned = (req, res, next) => {
+	console.log(req.header('X-Webhook-Signature'));
+	console.log('Netlify Body: ', JSON.stringify(req.body));
 	let signature = req.header('X-Webhook-Signature'),
 		options = { iss: 'netlify', verify_iss: true, algorithm: 'HS256' },
-		decodedHash = jwt.decode(signature, env.NETLIFY_KEY, true, options),
-		bodyHash = crypto.createHash('sha256', decodedHash.sha256).update(JSON.stringify(req.body)).digest('hex');
-
+		decodedHash = jwt.decode(signature, env.NETLIFY_KEY, true, options).sha256,
+		bodyHash = crypto.createHash('sha256', decodedHash).update(JSON.stringify(req.body)).digest('hex');
+	
 	if (decodedHash !== bodyHash) {
-		res.status(403).send('Please provide a valid webhook signature!');
+		return res.status(403).send('Please provide a valid webhook signature!');
 	}
 	
 	next();
 };
 
 app.post('/netlify', netlifySigned, (req, res) => {
-	console.log('Netlify Body: ', JSON.stringify(req.body));
+	let appName = req.body.name.charAt(0).toUpperCase() + req.body.name.substr(1).toLowerCase();
+	notifier.notify({
+		title: appName,
+		message: 'Hello, there!'
+	});
 	res.status(200).send('Thankyou for status update!');
 });
 

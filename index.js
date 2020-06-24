@@ -55,10 +55,13 @@ app.post('/netlify', netlifySigned, (req, res) => {
 });
 
 app.post('/heroku', (req, res) => {
-	console.log('Params: ', req.params);
-	console.log('Query: ', req.query);
-	console.log('Body: ', req.body);
-	res.status(200).send('');
+	let data = {
+		service: 'Heroku',
+		url: req.body.url,
+		appName: req.body.app.charAt(0).toUpperCase() + req.body.app.substr(1).toLowerCase(),
+	};
+	socketUtils.notify(io, data);
+	res.status(200).send('Thankyou for status update!');
 });
 
 app.get('/*', (req, res) => {

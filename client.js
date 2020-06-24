@@ -29,8 +29,7 @@ let env = process.env,
 				title: 'Netlify',
 				icon: './assets/netlify.png',
 				sound: 'Bottle',
-				closeLabel: 'Open App',
-				actions: 'Open Build'
+				actions: 'Open App'
 			};
 			if (build.state == 'building') {
 				payload['message'] = build.appName + ' build started';
@@ -47,12 +46,30 @@ let env = process.env,
 				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.red(payload.message));
 			}
 		
-			notifier.notify(payload, (error, response) => {
-				if (response === 'activate') {
+			notifier.notify(payload, (error, response, metadata) => {
+				if (metadata.activationType === 'contentsClicked') {
 					opn(build.url);
 				}
-				else if (response === 'closed') {
+				else if (metadata.activationType === 'actionClicked') {
 					opn(build.appUrl);
+				}
+			});
+		});
+
+		socket.on('herokuNotification', (build) => {
+			let payload = {
+				title: 'Heroku',
+				message: build.appName + ' build successful',
+				icon: './assets/heroku.png',
+				sound: 'Submarine',
+				actions: 'Open App',
+			};
+
+			logger.log(false, chalk.bgWhite.black(' Heroku  ') + ' : ' + chalk.green(payload.message));
+
+			notifier.notify(payload, (error, response) => {
+				if (response === 'activate' || response === 'closed') {
+					opn(build.url);
 				}
 			});
 		});

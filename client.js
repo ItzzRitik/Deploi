@@ -1,6 +1,6 @@
 require('dotenv').config();
 let env = process.env,
-	opn = require('opn'),
+	open = require('open'),
 	notifier = require('node-notifier'),
 	chalk = require('chalk'),
 	logger = require('./tools/logger'),
@@ -33,25 +33,28 @@ let env = process.env,
 			};
 			if (build.state == 'building') {
 				payload['message'] = build.appName + ' build started';
-				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.blue(payload.message));
+				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.blue(payload.message)  + 
+					chalk.blue('( ' + build.url + ' )'));
 			}
 			else if (build.state == 'ready') {
 				payload['sound'] = 'Submarine';
 				payload['message'] = build.appName + ' build successful';
-				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.green(payload.message));
+				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.green(payload.message)  + 
+					chalk.blue('( ' + build.url + ' )'));
 			}
 			else if (build.state == 'error') {
 				payload['sound'] = 'Basso';
 				payload['message'] = build.appName + ' build failed';
-				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.red(payload.message));
+				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.red(payload.message)  + 
+					chalk.blue('( ' + build.url + ' )'));
 			}
 		
 			notifier.notify(payload, (error, response, metadata) => {
-				if (metadata.activationType === 'contentsClicked') {
-					opn(build.url);
+				if (metadata.activationType === 'contentsClicked' || metadata.activationType === 'clicked') {
+					open(build.url, { app: 'google chrome' });
 				}
 				else if (metadata.activationType === 'actionClicked') {
-					opn(build.appUrl);
+					open(build.appUrl, { app: 'google chrome' });
 				}
 			});
 		});
@@ -65,11 +68,12 @@ let env = process.env,
 				actions: 'Open App',
 			};
 
-			logger.log(false, chalk.bgWhite.black(' Heroku  ') + ' : ' + chalk.green(payload.message));
+			logger.log(false, chalk.bgWhite.black(' Heroku  ') + ' : ' + chalk.green(payload.message) + 
+				chalk.blue('( ' + build.url + ' )'));
 
 			notifier.notify(payload, (error, response) => {
 				if (response === 'activate' || response === 'closed') {
-					opn(build.url);
+					open(build.url, { app: 'google chrome' });
 				}
 			});
 		});

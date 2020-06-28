@@ -5,6 +5,7 @@ let env = process.env,
 	chalk = require('chalk'),
 	logger = require('./tools/logger'),
 	io = require('socket.io-client'),
+	terminalLink = require('terminal-link'),
 	socket = io(env.SERVER_URL, { reconnect: true }),
 	connecting = null,
 	consoleLoader = (msg) => {
@@ -26,27 +27,28 @@ let env = process.env,
 		
 		socket.on('netlifyNotification', (build) => {
 			let payload = {
-				title: 'Netlify',
-				icon: './assets/netlify.png',
-				sound: 'Bottle',
-				actions: 'Open App'
-			};
+					title: 'Netlify',
+					icon: './assets/netlify.png',
+					sound: 'Bottle',
+					actions: 'Open App'
+				},
+				buildUrl = terminalLink('Build Url', build.url);
 			if (build.state == 'building') {
 				payload['message'] = build.appName + ' build started';
 				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.blue(payload.message)  + 
-					chalk.blue('( ' + build.url + ' )'));
+					chalk.blue(' ( ' + buildUrl + ' )'));
 			}
 			else if (build.state == 'ready') {
 				payload['sound'] = 'Submarine';
 				payload['message'] = build.appName + ' build successful';
 				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.green(payload.message)  + 
-					chalk.blue('( ' + build.url + ' )'));
+					chalk.blue(' ( ' + buildUrl + ' )'));
 			}
 			else if (build.state == 'error') {
 				payload['sound'] = 'Basso';
 				payload['message'] = build.appName + ' build failed';
 				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.red(payload.message)  + 
-					chalk.blue('( ' + build.url + ' )'));
+					chalk.blue(' ( ' + buildUrl + ' )'));
 			}
 		
 			notifier.notify(payload, (error, response, metadata) => {
@@ -69,7 +71,7 @@ let env = process.env,
 			};
 
 			logger.log(false, chalk.bgWhite.black(' Heroku  ') + ' : ' + chalk.green(payload.message) + 
-				chalk.blue('( ' + build.url + ' )'));
+				chalk.blue(' ( ' + terminalLink('Build Url', build.url) + ' )'));
 
 			notifier.notify(payload, (error, response) => {
 				if (response === 'activate' || response === 'closed') {

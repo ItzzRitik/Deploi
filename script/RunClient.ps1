@@ -1,15 +1,3 @@
-$pshost = get-host
-$pswindow = $pshost.ui.rawui
-$pswindow.windowtitle = "Deplow Node Client"
-$newsize = $pswindow.buffersize
-$newsize.width = 120
-$newsize.height = 50
-$pswindow.buffersize = $newsize
-$newsize = $pswindow.windowsize
-$newsize.width = 100
-$newsize.height = 20
-$pswindow.windowsize = $newsize
-
 $appName = "Deplow\client.js"
 $list = forever list
 $isDeplowRunning = $false

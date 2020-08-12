@@ -5,6 +5,8 @@
     "editor.detectIndentation": false,
 	"editor.insertSpaces": false,
     "cSpell.words": [
-        "bodyparser"
-    ]
+		"bodyparser",
+		"deplow"
+	],
+	"powershell.codeFormatting.addWhitespaceAroundPipe": true
 }

@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ItzzRitik/Notify.git"
+    "url": "git+https://github.com/ItzzRitik/Deplow.git"
   },
   "author": "Ritik Srivastava",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ItzzRitik/Notify/issues"
+    "url": "https://github.com/ItzzRitik/Deplow/issues"
   },
-  "homepage": "https://github.com/ItzzRitik/Notify#readme",
+  "homepage": "https://github.com/ItzzRitik/Deplow#readme",
   "dependencies": {
     "chalk": "^4.1.0",
     "dotenv": "^8.2.0",

@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 import terminalLink from 'terminal-link';
 
 import { config as initEnv } from 'dotenv';
-import { initLogger } from './tools/logger.js';
+import { initLogger } from '../server/tools/logger.js';
 
 initEnv();
 initLogger();

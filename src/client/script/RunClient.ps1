@@ -1,21 +1,26 @@
-$appName = "Deplow\client.js"
+$foreverExists = npm list -g forever
+if($foreverExists -clike '*(empty)*') {
+	echo "Forever module doesn't exist -> Installing"
+	npm i -g forever
+}
+
 $list = forever list
 $isDeplowRunning = $false
 $state = $null
 
 foreach ($item in $list) {
-	if($item.IndexOf($appName) -ne -1) {
+	if($item -clike '*deploi.js*') {
 		$isDeplowRunning = $true
 		break
 	}
 }
 
 if($isDeplowRunning) {
-	forever stop client.js | Out-Null
+	npm run stopClient | Out-Null
 	$state = "Service stopped"
 }
 else {
-	forever start client.js | Out-Null
+	npm run startClient | Out-Null
 	$state = "Service started"
 }
 

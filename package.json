@@ -5,8 +5,10 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "client": "node client.js"
+    "start": "node src/server/deploi.js",
+    "client": "node src/client/deploi.js",
+    "startClient": "forever start src/client/deploi.js",
+    "stopClient": "forever stop src/client/deploi.js"
   },
   "repository": {
     "type": "git",

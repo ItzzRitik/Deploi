@@ -1,27 +1,33 @@
-require('dotenv').config();
+import open from 'open';
+import notifier from 'node-notifier';
+import chalk from 'chalk';
+import io from 'socket.io-client';
+import terminalLink from 'terminal-link';
+
+import { config as initEnv } from 'dotenv';
+import { initLogger } from './tools/logger.js';
+
+initEnv();
+initLogger();
+
 let env = process.env,
-	open = require('open'),
-	notifier = require('node-notifier'),
-	chalk = require('chalk'),
-	logger = require('./tools/logger'),
-	io = require('socket.io-client'),
-	terminalLink = require('terminal-link'),
 	socket = io(env.SERVER_URL, { reconnect: true }),
 	connecting = null,
 	consoleLoader = (msg) => {
 		let x = 0, 
 			load = ['⠁ ', '⠈ ', ' ⠁', ' ⠈', ' ⠐', ' ⠠', ' ⢀', ' ⡀', '⢀ ', '⡀ ', '⠄ ', '⠂ '];
 		return setInterval(() => {
-			logger.stdout('\r' + msg + ' ' + load[x = (++x < load.length) ? x : 0]);
+			console.stdout('\r' + msg + ' ' + load[x = (++x < load.length) ? x : 0]);
 		}, 50);
 	},
 	initSocket = () => {
 		socket.on('connect', () => {   
 			socket.emit('join', 'Node Terminal', (host) => {
 				clearInterval(connecting);
-				logger.stdout('\033[A\33[2K\r');
-				logger.log(true, 'Connected to ', chalk.blue(host));
-				logger.log(true, 'Notifications:\n');
+				console.stdout('\n');
+				console.moveCursor(0, -1);
+				console.log(true, 'Connected to ', chalk.blue(host));
+				console.log(true, 'Notifications:\n');
 			});
 		});
 		
@@ -35,19 +41,19 @@ let env = process.env,
 				buildUrl = terminalLink('Build Url', build.url);
 			if (build.state == 'building') {
 				payload['message'] = build.appName + ' build started';
-				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.blue(payload.message)  + 
+				console.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.blue(payload.message)  + 
 					chalk.blue(' ( ' + buildUrl + ' )'));
 			}
 			else if (build.state == 'ready') {
 				payload['sound'] = 'Submarine';
 				payload['message'] = build.appName + ' build successful';
-				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.green(payload.message)  + 
+				console.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.green(payload.message)  + 
 					chalk.blue(' ( ' + buildUrl + ' )'));
 			}
 			else if (build.state == 'error') {
 				payload['sound'] = 'Basso';
 				payload['message'] = build.appName + ' build failed';
-				logger.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.red(payload.message)  + 
+				console.log(false, chalk.bgWhite.black(' Netlify ') + ' : ' + chalk.red(payload.message)  + 
 					chalk.blue(' ( ' + buildUrl + ' )'));
 			}
 		
@@ -70,7 +76,7 @@ let env = process.env,
 				actions: 'Open App',
 			};
 
-			logger.log(false, chalk.bgWhite.black(' Heroku  ') + ' : ' + chalk.green(payload.message) + 
+			console.log(false, chalk.bgWhite.black(' Heroku  ') + ' : ' + chalk.green(payload.message) + 
 				chalk.blue(' ( ' + terminalLink('Build Url', build.url) + ' )'));
 
 			notifier.notify(payload, (error, response) => {
@@ -81,7 +87,7 @@ let env = process.env,
 		});
 	};
 
-logger.clear();
+console.clear();
 connecting = consoleLoader('Connecting To Server');
 initSocket();
 

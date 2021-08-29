@@ -5,17 +5,17 @@ if($foreverExists -clike '*(empty)*') {
 }
 
 $list = forever list
-$isDeplowRunning = $false
+$isDeploiRunning = $false
 $state = $null
 
 foreach ($item in $list) {
 	if($item -clike '*deploi.js*') {
-		$isDeplowRunning = $true
+		$isDeploiRunning = $true
 		break
 	}
 }
 
-if($isDeplowRunning) {
+if($isDeploiRunning) {
 	npm run stopClient | Out-Null
 	$state = "Service stopped"
 }
@@ -31,7 +31,7 @@ $template = @"
 <toast>
     <visual>
         <binding template="ToastText02">
-            <text id="1">Deplow</text>
+            <text id="1">Deploi</text>
             <text id="2">$state</text>
         </binding>
     </visual>
@@ -42,4 +42,4 @@ $template = @"
 $xml = New-Object Windows.Data.Xml.Dom.XmlDocument
 $xml.LoadXml($template)
 $toast = New-Object Windows.UI.Notifications.ToastNotification $xml
-[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier("Deplow").Show($toast)
+[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier("Deploi").Show($toast)

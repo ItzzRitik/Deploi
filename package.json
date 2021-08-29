@@ -1,5 +1,5 @@
 {
-  "name": "deplow",
+  "name": "deploi",
   "version": "1.0.0",
   "description": "",
   "type": "module",
@@ -8,18 +8,19 @@
     "start": "node src/server/deploi.js",
     "client": "node src/client/deploi.js",
     "startClient": "forever start src/client/deploi.js",
-    "stopClient": "forever stop src/client/deploi.js"
+    "stopClient": "forever stop src/client/deploi.js",
+    "buildEXE": "powershell -ExecutionPolicy bypass -windowstyle hidden -file ./src/client/scripts/buildEXE.ps1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ItzzRitik/Deplow.git"
+    "url": "git+https://github.com/ItzzRitik/Deploi.git"
   },
   "author": "Ritik Srivastava",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ItzzRitik/Deplow/issues"
+    "url": "https://github.com/ItzzRitik/Deploi/issues"
   },
-  "homepage": "https://github.com/ItzzRitik/Deplow#readme",
+  "homepage": "https://github.com/ItzzRitik/Deploi#readme",
   "dependencies": {
     "chalk": "^4.1.2",
     "dotenv": "^10.0.0",

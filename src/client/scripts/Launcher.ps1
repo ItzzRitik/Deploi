@@ -1,0 +1,1 @@
+powershell -ExecutionPolicy Unrestricted -windowstyle hidden -file ./src/client/scripts/Deploi.ps1

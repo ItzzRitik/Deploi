@@ -6,8 +6,7 @@
 	"editor.insertSpaces": false,
     "cSpell.words": [
 		"bodyparser",
-		"deploi",
-		"deplow"
+		"deploi"
 	],
 	"powershell.codeFormatting.addWhitespaceAroundPipe": true
 }

@@ -25,7 +25,7 @@ catch {
 
 try {
 	Import-Module PS2EXE -Force -Erroraction stop
-	PS2EXE -InputFile src/client/scripts/Launcher.ps1 -OutputFile Deploi.exe -iconFile src/client/assets/deploi.ico -noConsole -noOutput -noError
+	PS2EXE -InputFile src/client/scripts/Launcher.ps1 -OutputFile Deploi.exe -iconFile src/client/assets/icons/deploi.ico -noConsole -noOutput -noError
 }
 catch {
 	Stop-Process -Id $pid

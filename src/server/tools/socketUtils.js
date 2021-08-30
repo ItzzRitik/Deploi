@@ -9,12 +9,10 @@ const notifySocket = (io, data) => {
 	instances = {},
 	initSocket = (io, cb) => {
 		io.on('connection', (socket) => {
-			socket.on('join', (instance, cb) => {
+			socket.on('join', (instance) => {
 				socket.join('notificationRoom');
 				instances[socket.id] = instance;
 				console.log(false, chalk.green(instances[socket.id]) + ' (' + socket.id + ') connected');
-
-				cb((socket.handshake.secure ? 'https://' : 'http://') + socket.handshake.headers.host);
 			});
         
 			socket.on('disconnect', () => {

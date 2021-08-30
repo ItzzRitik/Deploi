@@ -4,14 +4,11 @@ import chalk from 'chalk';
 import io from 'socket.io-client';
 import terminalLink from 'terminal-link';
 
-import { config as initEnv } from 'dotenv';
 import { initLogger } from '../server/tools/logger.js';
-
-initEnv();
 initLogger();
 
-let env = process.env,
-	socket = io(env.SERVER_URL, { reconnect: true }),
+let serverURL = 'https://deploi.herokuapp.com',
+	socket = io(serverURL, { reconnect: true }),
 	connecting = null,
 	consoleLoader = (msg) => {
 		let x = 0, 
@@ -22,11 +19,11 @@ let env = process.env,
 	},
 	initSocket = () => {
 		socket.on('connect', () => {   
-			socket.emit('join', 'Node Terminal', (host) => {
+			socket.emit('join', 'Node Terminal', () => {
 				clearInterval(connecting);
 				console.stdout('\n');
 				console.moveCursor(0, -1);
-				console.log(true, 'Connected to ', chalk.blue(host));
+				console.log(true, 'Connected to ', chalk.blue(serverURL));
 				console.log(true, 'Notifications:\n');
 			});
 		});
